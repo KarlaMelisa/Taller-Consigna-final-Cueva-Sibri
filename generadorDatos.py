@@ -27,27 +27,27 @@ for dia in range(numDias):
 # Escribe datos en diferentes archivos CSV dependiento del sector
 with open("quitumbe.csv", "w", newline="") as file:
     ingreso = csv.writer(file)
-    ingreso.writerows(["QUITUMBE", "", "", "", "", "", "", ""])
+    ingreso.writerow(["QUITUMBE", "", "", "", "", "", "", ""])
     ingreso.writerow(["CO2", "SO2", "NO2", "PM2.5", "TEMPERATURA", "VELOCIDAD VIENTO", "HUMEDAD", "FECHA"])
     ingreso.writerows(datos)
 with open("nayon.csv", "w", newline="") as file:
     ingreso = csv.writer(file)
-    ingreso.writerows(["NAYON", "", "", "", "", "", "", ""])
+    ingreso.writerow(["NAYON", "", "", "", "", "", "", ""])
     ingreso.writerow(["CO2", "SO2", "NO2", "PM2.5", "TEMPERATURA", "VELOCIDAD VIENTO", "HUMEDAD", "FECHA"])
     ingreso.writerows(datos)
 with open("cotocollao.csv", "w", newline="") as file:
     ingreso = csv.writer(file)
-    ingreso.writerows(["COTOCOLLAO", "", "", "", "", "", "", ""])
+    ingreso.writerow(["COTOCOLLAO", "", "", "", "", "", "", ""])
     ingreso.writerow(["CO2", "SO2", "NO2", "PM2.5", "TEMPERATURA", "VELOCIDAD VIENTO", "HUMEDAD", "FECHA"])
     ingreso.writerows(datos)
 with open("monteserrin.csv", "w", newline="") as file:
     ingreso = csv.writer(file)
-    ingreso.writerows(["MONTESERRIN", "", "", "", "", "", "", ""])
+    ingreso.writerow(["MONTESERRIN", "", "", "", "", "", "", ""])
     ingreso.writerow(["CO2", "SO2", "NO2", "PM2.5", "TEMPERATURA", "VELOCIDAD VIENTO", "HUMEDAD", "FECHA"])
     ingreso.writerows(datos)
 with open("alangasi.csv", "w", newline="") as file:
     ingreso = csv.writer(file)
-    ingreso.writerows(["ALANGASI", "", "", "", "", "", "", ""])
+    ingreso.writerow(["ALANGASI", "", "", "", "", "", "", ""])
     ingreso.writerow(["CO2", "SO2", "NO2", "PM2.5", "TEMPERATURA", "VELOCIDAD VIENTO", "HUMEDAD", "FECHA"])
     ingreso.writerows(datos)
 print("Datos generados y guardados exitosamente.")
