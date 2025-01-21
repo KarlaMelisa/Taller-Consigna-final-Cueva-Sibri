@@ -1,3 +1,6 @@
+#ifndef FUNCIONES_H
+#define FUNCIONES_H
+
 struct Datos{
     float co2;
     float so2;
@@ -18,3 +21,11 @@ struct leerDatos {
     float viento[100];
     float hum[100];
 };
+
+int menu();
+void guardarDatos( const char zonas[5][20], const char archivos[5][20]);
+void monitoreo(const char archivos[5][20], const char zonas[5][20], struct leerDatos *leerDatos);
+void predicManana(const char archivos[5][20], struct leerDatos *leerDatos, struct Datos *predicciones);
+void printPromedios(struct leerDatos *leerDatosHis, const char archivos[5][20], const char zonas[5][20]);
+void recomendaciones();
+#endif // FUNCIONES_H
