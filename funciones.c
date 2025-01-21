@@ -2,8 +2,6 @@
 #include <stdlib.h>
 #include "funciones.h"
 
-struct leerDatos leerDatos;
-
 int menu(){
     int opcion=0;    
     printf("--------------MENU DE SELECCION:-------------\n");
@@ -24,19 +22,19 @@ int menu(){
 
 void ingresoDatos(FILE *fzona){
     struct Datos datos;
-    printf("Nivel de Co2: \n>> ");
+    printf("Nivel de Co2 en ppm: \n>> ");
     scanf("%f", &datos.co2);
-    printf("Nivel de So2: \n>> ");
+    printf("Nivel de So2 en µg/m³: \n>> ");
     scanf("%f", &datos.so2);
-    printf("Nivel de No2: \n>> ");
+    printf("Nivel de No2 en µg/m³: \n>> ");
     scanf("%f", &datos.no2);
-    printf("Nivel de PM2.5: \n>> ");
+    printf("Nivel de PM2.5 en µg/m³: \n>> ");
     scanf("%f", &datos.pm25);
     printf("Temperatura en grados celsius: \n>> ");
     scanf("%f", &datos.temp);
     printf("Velocidad del viento en km/h: \n>> ");
     scanf("%f", &datos.viento);
-    printf("Humedad: \n>> ");
+    printf("Humedad en porcentaje: \n>> ");
     scanf("%f", &datos.hum);
     printf("Fecha (aaaa-mm-dd): \n>> ");
     scanf("%s", datos.fecha);
@@ -90,32 +88,54 @@ float promedio(float datos[100], int i){
     return prom;
 }
 
-float calcularAPI(){
-
-}
-
-float predicManana(const char *archivo, struct leerDatos *leerDatos){ 
-
-    int i= leerArchivos(archivo, leerDatos);
-    float prom_co2 = promedio(leerDatos->co2, i);
-    float prom_so2 = promedio(leerDatos->so2, i);
-    float prom_no2 = promedio(leerDatos->no2, i);
-    float prom_pm25 = promedio(leerDatos->pm25, i);
-    float prom_temp = promedio(leerDatos->temp, i);
-    float prom_viento = promedio(leerDatos->viento, i);
-    float prom_hum = promedio(leerDatos->hum, i);
-
-    struct Datos promedios = {prom_co2, prom_so2, prom_no2, prom_pm25, prom_temp, prom_viento, prom_hum, " "}; //Estructura con los promedios de los datos, none es la fecha que no se usa en calculos
-    float api = calcAPI(&promedios);
-    return api;
-}
-
-void alerta(const char archivos[5][20], const char zonas[5][20]){
-    float api=0;
-    for (int i=0; i<5; i++){
-        api=predicManana(archivos[i], &leerDatos);
-        if (api>200){
-            printf("\nALERTA DE PELIGRO: Los indices para manana en %s superan los limites para la salud.", zonas[i]);
-        }
+void predicciones(struct Datos promedios, const char zonas[20]){
+    struct Datos min = {200,0,0,0,18,0,30};
+    struct Datos max = {1000,40,25,15,30,10,70};
+    printf("-----------------MONITOREO DE DATOS ULTIMOS 30 DIAS EN %s-----------------\n", zonas);    
+    if (promedios.co2 < min.co2 || promedios.co2 > max.co2) {
+        printf("Promedio de CO2 fuera del rango: %.1f\n", promedios.co2);
+    }
+    if (promedios.so2 < min.so2 || promedios.so2 > max.so2) {
+        printf("Promedio de SO2 fuera del rango: %.1f\n", promedios.so2);
+    }
+    if (promedios.no2 < min.no2 || promedios.no2 > max.no2) {
+        printf("Promedio de NO2 fuera del rango: %.1f\n", promedios.no2);
+    }
+    if (promedios.pm25 < min.pm25 || promedios.pm25 > max.pm25) {
+        printf("Promedio de PM2.5 fuera del rango: %.1f\n", promedios.pm25);
+    }
+    if (promedios.temp < min.temp || promedios.temp > max.temp) {
+        printf("Promedio de temperatura fuera del rango: %.1f\n", promedios.temp);
+    }
+    if (promedios.viento < min.viento || promedios.viento > max.viento) {
+        printf("Promedio de velocidad del viento fuera del rango: %.1f\n", promedios.viento);
+    }
+    if (promedios.hum < min.hum || promedios.hum > max.hum) {
+        printf("Promedio de humedad fuera del rango: %.1f\n", promedios.hum);
     }
 }
+
+void monitoreo(const char archivos[5][20], const char zonas[5][20], struct leerDatos *leerDatos, struct Datos *promedios){
+    for (int j=0; j<5; j++){
+        int i= leerArchivos(archivos[j], leerDatos);
+        float prom_co2 = promedio(leerDatos->co2, i);
+        float prom_so2 = promedio(leerDatos->so2, i);
+        float prom_no2 = promedio(leerDatos->no2, i);
+        float prom_pm25 = promedio(leerDatos->pm25, i);
+        float prom_temp = promedio(leerDatos->temp, i);
+        float prom_viento = promedio(leerDatos->viento, i);
+        float prom_hum = promedio(leerDatos->hum, i);
+
+        promedios[j].co2 = prom_co2;
+        promedios[j].so2 = prom_so2;
+        promedios[j].no2 = prom_no2;
+        promedios[j].pm25 = prom_pm25;
+        promedios[j].temp = prom_temp;
+        promedios[j].viento = prom_viento;
+        promedios[j].hum = prom_hum;
+        strcpy(promedios[j].fecha, " ");
+        predicciones(*promedios,zonas[j]);
+    }
+}
+
+

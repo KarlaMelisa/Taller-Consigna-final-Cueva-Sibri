@@ -4,11 +4,12 @@ Se requiere desarrollar un programa en C que permita monitorear y predecir los n
 
 Requerimientos Funcionales:
 
-    1.Monitoreo de contaminación actual: Calcular los niveles actuales de contaminaciónde las zonas y compararlos con los límites aceptables.
+    1.Monitoreo de contaminación actual: Calcular los niveles actuales de contaminación de las zonas y compararlos con los límites aceptables.
 
     2.Predicción de niveles futuros: Basarse en los datos históricos y en los factoresclimáticos actuales (como temperatura, velocidad del viento y nivel de humedad.) para predecir los niveles de contaminación en las próximas 24 horas.
 
     3.Alertas preventivas: Emitir alertas si se prevé que los niveles de contaminación excederán los límites establecidos.
+
     4.Cálculo de promedios históricos: Calcular el promedio de contaminación en cada zonapara los últimos 30 días y comparar con los límites de la OMS.
 
     5.Generación de recomendaciones: Sugerir medidas de mitigación (como la reduccióndel tráfico vehicular, el cierre temporal de industrias o la suspensión de actividades alaire libre) si los niveles de contaminación actual o prevista superan los límites.
