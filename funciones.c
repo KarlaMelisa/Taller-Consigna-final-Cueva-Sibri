@@ -91,22 +91,22 @@ float promedio(float datos[100], int i){
 }
 
 float calcularAPI(){
-    
+
 }
 
 float predicManana(const char *archivo, struct leerDatos *leerDatos){ 
 
     int i= leerArchivos(archivo, leerDatos);
-    float prom_co2 = calcPromPond(leerDatos->co2, i);
-    float prom_so2 = calcPromPond(leerDatos->so2, i);
-    float prom_no2 = calcPromPond(leerDatos->no2, i);
-    float prom_pm25 = calcPromPond(leerDatos->pm25, i);
-    float prom_temp = calcPromPond(leerDatos->temp, i);
-    float prom_viento = calcPromPond(leerDatos->viento, i);
-    float prom_hum = calcPromPond(leerDatos->hum, i);
+    float prom_co2 = promedio(leerDatos->co2, i);
+    float prom_so2 = promedio(leerDatos->so2, i);
+    float prom_no2 = promedio(leerDatos->no2, i);
+    float prom_pm25 = promedio(leerDatos->pm25, i);
+    float prom_temp = promedio(leerDatos->temp, i);
+    float prom_viento = promedio(leerDatos->viento, i);
+    float prom_hum = promedio(leerDatos->hum, i);
 
-    struct Datos proms = {prom_co2, prom_so2, prom_no2, prom_pm25, prom_temp, prom_viento, prom_hum, " "}; //Estructura con los promedios de los datos, none es la fecha que no se usa en calculos
-    float api = calcAPI(&proms);
+    struct Datos promedios = {prom_co2, prom_so2, prom_no2, prom_pm25, prom_temp, prom_viento, prom_hum, " "}; //Estructura con los promedios de los datos, none es la fecha que no se usa en calculos
+    float api = calcAPI(&promedios);
     return api;
 }
 
