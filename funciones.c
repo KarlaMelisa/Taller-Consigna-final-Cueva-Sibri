@@ -104,26 +104,27 @@ void guardarDatos( const char zonas[5][20], const char archivos[5][20]){
 }
 
 int leerArchivos(const char *filename, struct leerDatos *leerDatos){ //Funcion para leer los datos de los archivos
+    printf("Opening file: %s\n", filename); // Debug print
     FILE *file = fopen(filename, "r");
     if (file == NULL){
         printf("Error al abrir el archivo %s\n", filename);
         return 0;
     }
-    int i = 0, numLineas=0;
+    int i = 0, numLineas = 0;
     char buffer[256];
     while (fgets(buffer, 256, file) != NULL){
         numLineas++;
         if (numLineas > 2){
-                if (sscanf(buffer, "%f,%f,%f,%f,%f,%f,%f", &leerDatos->co2[i], &leerDatos->so2[i], &leerDatos->no2[i], &leerDatos->pm25[i], &leerDatos->temp[i], &leerDatos->viento[i], &leerDatos->hum[i])==7) 
+            if (sscanf(buffer, "%f,%f,%f,%f,%f,%f,%f", &leerDatos->co2[i], &leerDatos->so2[i], &leerDatos->no2[i], &leerDatos->pm25[i], &leerDatos->temp[i], &leerDatos->viento[i], &leerDatos->hum[i]) == 7){
                 i++;
-                else{
-                    printf("Error leyendo los datos del archivo\n");
-                    break;
-                }
+            } else {
+                printf("Error leyendo los datos del archivo en la linea %d\n", numLineas);
+                break;
             }
         }
+    }
     fclose(file);
-    return i;   
+    return i;
 }
 
 float promedio(float datos[100], int i){ 
@@ -166,16 +167,20 @@ void predicManana(const char archivos[5][20], struct leerDatos *leerDatos, struc
         predicciones[j].viento = promedioPonderado(leerDatos->viento, numDatos);
         predicciones[j].hum = promedioPonderado(leerDatos->hum, numDatos);
         strcpy(predicciones[j].fecha, " "); 
-        printf("-------------------------PREDICCION PARA MANANA DE %s-------------------------\n", zonas[j]);
-        printf("CO2: %.2f\n", predicciones[j].co2);
-        printf("SO2: %.2f\n", predicciones[j].so2);
-        printf("NO2: %.2f\n", predicciones[j].no2);
-        printf("PM2.5: %.2f\n", predicciones[j].pm25);
-        printf("Temperatura: %.2f\n", predicciones[j].temp);
-        printf("Viento: %.2f\n", predicciones[j].viento);
-        printf("Humedad: %.2f\n", predicciones[j].hum);
-        fprintf(file,"-------------------------PREDICCION PARA MANANA DE %s-------------------------\n", zonas[j]);
-        fprintf(file, "%.2f,%.2f,%.2f,%.2f,%.2f,%.2f,%.2f\n", predicciones[j].co2, predicciones[j].so2, predicciones[j].no2, predicciones[j].pm25, predicciones[j].temp, predicciones[j].viento, predicciones[j].hum);
+            printf("-------------------------PREDICCION PARA MANANA DE %s-------------------------\n", zonas[j]);
+            printf("| %-10s | %-10s | %-10s | %-10s | %-10s | %-10s | %-10s |\n", "CO2 (ppm)", "SO2 (µg/m³)", "NO2 (µg/m³)", "PM2.5 (µg/m³)", "Temp (°C)", "Viento (km/h)", "Humedad ()");
+            printf("|------------|------------|------------|------------|------------|------------|------------|\n");
+
+            // Print data
+            printf("| %-10.2f | %-10.2f | %-10.2f | %-10.2f | %-10.2f | %-10.2f | %-10.2f |\n", 
+                   predicciones[j].co2, predicciones[j].so2, predicciones[j].no2, predicciones[j].pm25, predicciones[j].temp, predicciones[j].viento, predicciones[j].hum);
+
+            // Write to file
+            fprintf(file, "-------------------------PREDICCION PARA MANANA DE %s-------------------------\n", zonas[j]);
+            fprintf(file, "| %-10s | %-10s | %-10s | %-10s | %-10s | %-10s | %-10s |\n", "CO2 (ppm)", "SO2 (µg/m³)", "NO2 (µg/m³)", "PM2.5 (µg/m³)", "Temp (°C)", "Viento (km/h)", "Humedad ()");
+            fprintf(file, "|------------|------------|------------|------------|------------|------------|------------|\n");
+            fprintf(file, "| %-10.2f | %-10.2f | %-10.2f | %-10.2f | %-10.2f | %-10.2f | %-10.2f |\n", 
+                    predicciones[j].co2, predicciones[j].so2, predicciones[j].no2, predicciones[j].pm25, predicciones[j].temp, predicciones[j].viento, predicciones[j].hum);
     }
     fclose(file);
 }
@@ -239,13 +244,10 @@ void printPromedios(struct leerDatos *leerDatosHis, const char archivos[5][20], 
             promediosHis.hum = promedio(leerDatosHis->hum, numDatos);
 
             printf("-----------------PROMEDIOS DE DATOS HISTORICOS EN %s-----------------\n", zonas[j]);
-            printf("CO2: \n>>%.2f\n", promediosHis.co2);
-            printf("SO2: \n>>%.2f\n", promediosHis.so2);
-            printf("NO2: \n>>%.2f\n", promediosHis.no2);
-            printf("PM2.5: \n>>%.2f\n", promediosHis.pm25);
-            printf("Temperatura: \n>>%.2f\n", promediosHis.temp);
-            printf("Velocidad del Viento: \n>>%.2f\n", promediosHis.viento);
-            printf("Humedad: \n>>%.2f\n", promediosHis.hum);
+            printf("| %-10s | %-10s | %-10s | %-10s | %-10s | %-10s | %-10s |\n", "CO2 (ppm)", "SO2 (µg/m³)", "NO2 (µg/m³)", "PM2.5 (µg/m³)", "Temp (°C)", "Viento (km/h)", "Humedad ()");
+            printf("|------------|------------|------------|------------|------------|------------|------------|\n");
+            printf("| %-10.2f | %-10.2f | %-10.2f | %-10.2f | %-10.2f | %-10.2f | %-10.2f |\n", 
+                   promediosHis.co2, promediosHis.so2, promediosHis.no2, promediosHis.pm25, promediosHis.temp, promediosHis.viento, promediosHis.hum);
         } else {
             printf("No se encontraron datos en el archivo %s\n", archivos[j]);
         }

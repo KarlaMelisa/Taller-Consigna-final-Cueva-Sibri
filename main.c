@@ -36,7 +36,7 @@ int main (int argc, char *argv[]) {
             printf("Opcion no valida\n");
             break;
         }
-    } while (op >= 1 && op < 5);
+    } while (op >= 1 && op < 7);
     
     
     return 0;
